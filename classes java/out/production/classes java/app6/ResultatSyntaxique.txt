@@ -1,0 +1,2 @@
+Lecture de l'AST trouve : 1+0+10+111
+Evaluation de l'AST trouve : 122
