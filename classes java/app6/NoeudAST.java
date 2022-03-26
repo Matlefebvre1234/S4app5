@@ -19,8 +19,15 @@ public class NoeudAST extends ElemAST {
  
   /** Evaluation de noeud d'AST
    */
-  public int EvalAST( ) {
+  public float EvalAST( ) {
     //Faudrait faire des if pour les differnets operateurs
+    switch (terminal.chaine){
+      case "+":   return enfants[0].EvalAST() + enfants[1].EvalAST();
+      case "-":  return enfants[0].EvalAST() - enfants[1].EvalAST();
+      case "*":  return enfants[0].EvalAST() * enfants[1].EvalAST();
+      case "/":  return enfants[0].EvalAST() / enfants[1].EvalAST();
+
+    }
      return enfants[0].EvalAST() + enfants[1].EvalAST();
   }
 
@@ -28,7 +35,7 @@ public class NoeudAST extends ElemAST {
   /** Lecture de noeud d'AST
    */
   public String LectAST( ) {
-     return enfants[0].LectAST() + terminal.chaine + enfants[1].LectAST();
+     return "("+enfants[0].LectAST() + terminal.chaine + enfants[1].LectAST() + ")";
   }
 
 }

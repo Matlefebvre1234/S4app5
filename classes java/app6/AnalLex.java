@@ -156,8 +156,8 @@ public class AnalLex {
     System.out.println("Debut d'analyse lexicale");
     if (args.length == 0){
     args = new String [2];
-            args[0] = "ExpArith.txt";
-            args[1] = "ResultatLexical.txt";
+            args[0] = "classes Java/app6/ExpArith.txt";
+            args[1] = "classes Java/app6/ResultatLexical.txt";
     }
     Reader r = new Reader(args[0]);
 

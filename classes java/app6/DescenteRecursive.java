@@ -10,12 +10,59 @@ public class DescenteRecursive {
   Terminal currentTerminal;
   String chaine;
   AnalLex analyseurLexical;
+  static boolean Erreur = false;
+
+
+  public static void setErreur(boolean e)
+  {
+    Erreur = e;
+  }
+
+  public static boolean getErreur()
+  {
+
+    return Erreur;
+  }
+  public ElemAST F()
+  {
+
+    if(currentTerminal.chaine.equals("(") )
+    {
+      currentTerminal = analyseurLexical.prochainTerminal();
+      ElemAST dernierUL = E();
+      if(currentTerminal.chaine.equals(")"))
+      {
+        currentTerminal= analyseurLexical.prochainTerminal();
+        return dernierUL;
+      }
+      else {
+        System.out.println("Erreur: manque une \")\" au caractere " + analyseurLexical.pointeur);
+      }
+
+
+    }
+    else {
+      if(currentTerminal.operande)
+      {
+        FeuilleAST feuille = new FeuilleAST(currentTerminal);
+        currentTerminal = analyseurLexical.prochainTerminal();
+        return feuille;
+      }
+      else{
+        System.out.println("Erreur une opérande est attendu au caractere " + analyseurLexical.pointeur + " charatère présent " + currentTerminal.chaine );
+      }
+
+    }
+
+
+    return null;
+  }
 
   public ElemAST E(){
     ElemAST dernierUL = T();
     NoeudAST noeud;
     FeuilleAST feuille;
-    if(currentTerminal.chaine == "+")
+    if(currentTerminal.chaine.equals("+") || currentTerminal.chaine.equals("-") )
     {
       noeud = new NoeudAST(currentTerminal);
       noeud.enfants[0] = dernierUL;
@@ -25,23 +72,28 @@ public class DescenteRecursive {
     }
 
     else{
-      feuille = new FeuilleAST(dernierUL.terminal);
-      return feuille;
+      return dernierUL;
     }
 
   }
 
-  public FeuilleAST T(){
-    if(currentTerminal.operande){
-      Terminal temp = currentTerminal;
+  public ElemAST T(){
+    ElemAST dernierUL = F();
+    NoeudAST noeud;
+    FeuilleAST feuille;
+    if(currentTerminal.chaine.equals("*") || currentTerminal.chaine.equals("/")){
+      noeud = new NoeudAST(currentTerminal);
+      noeud.enfants[0] = dernierUL;
       currentTerminal = analyseurLexical.prochainTerminal();
-      return new FeuilleAST(temp);
+      noeud.enfants[1] = T();
+
+      return noeud;
     }
 
     else{
-      ErreurSynt("Erreur de grammaire");
+      return dernierUL;
     }
-    return null;
+
   }
 
 /** Constructeur de DescenteRecursive :
@@ -92,8 +144,8 @@ public void ErreurSynt(String s)
     System.out.println("Debut d'analyse syntaxique");
     if (args.length == 0){
       args = new String [2];
-      args[0] = "ExpArith.txt";
-      args[1] = "ResultatSyntaxique.txt";
+      args[0] = "classes Java/app6/ExpArith.txt";
+      args[1] = "classes Java/app6/ResultatSyntaxique.txt";
     }
     DescenteRecursive dr = new DescenteRecursive(args[0]);
     try {
@@ -101,7 +153,7 @@ public void ErreurSynt(String s)
       toWriteLect += "Lecture de l'AST trouve : " + RacineAST.LectAST() + "\n";
       System.out.println(toWriteLect);
       toWriteEval += "Evaluation de l'AST trouve : " + RacineAST.EvalAST() + "\n";
-      System.out.println(toWriteEval);
+      if(!DescenteRecursive.getErreur()) System.out.println(toWriteEval);
       Writer w = new Writer(args[1],toWriteLect+toWriteEval); // Ecriture de toWrite 
                                                               // dans fichier args[1]
     } catch (Exception e) {

@@ -18,8 +18,18 @@ public class FeuilleAST extends ElemAST {
 
   /** Evaluation de feuille d'AST
    */
-  public int EvalAST( ) {
-    return Integer.parseInt(terminal.chaine);
+  public float EvalAST( ) {
+
+      try {
+          return Float.parseFloat(terminal.chaine);
+      }catch (NumberFormatException e)
+      {
+
+          System.out.println("Erreur on ne peut pas evaluer des variables qui ne sont pas des chiffres");
+          DescenteRecursive.setErreur(true);
+          return 0;
+      }
+
   }
 
 

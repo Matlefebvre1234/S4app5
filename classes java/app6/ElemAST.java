@@ -10,7 +10,7 @@ public abstract class ElemAST {
 
   /** Evaluation d'AST
    */
-  public abstract int EvalAST();
+  public abstract float EvalAST();
 
 
   /** Lecture d'AST
